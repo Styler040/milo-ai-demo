@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Mein KI-Begleiter",
+  "short_name": "KI-Begleiter",
+  "description": "Aufgaben und besondere Tage einfach im Blick behalten.",
+  "lang": "de-DE",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fc",
+  "theme_color": "#15172e",
+  "icons": [
+    {"src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

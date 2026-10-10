@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#15172e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="KI-Begleiter">
+  <meta name="description" content="Ein persönlicher Alltagsbegleiter als erste iPhone-Demo: Aufgaben, wichtige Tage und ein einfacher Gesprächsbereich.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <title>Mein KI-Begleiter · Prototyp</title>
+  <style>
+    :root{color-scheme:light;--ink:#1d2441;--muted:#58627b;--line:#dfe4f0;--primary:#5755d9;--primary-ink:#fff;--soft:#eeedff;--panel:#fff;--bg:#f5f7fc;--success:#167e56;--danger:#b53150}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
+    button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+    button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #f5a83e;outline-offset:2px}
+    .shell{max-width:700px;margin:0 auto;min-height:100svh;padding-bottom:calc(98px + env(safe-area-inset-bottom))}
+    header{background:linear-gradient(140deg,#1b2146,#40339a);color:#fff;padding:calc(28px + env(safe-area-inset-top)) 22px 32px;border-radius:0 0 32px 32px}
+    .overline{font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#d9d5ff;font-size:12px}
+    h1{font-size:clamp(27px,7vw,34px);line-height:1.16;margin:8px 0 8px;letter-spacing:-.025em}
+    h2{font-size:22px;line-height:1.18;margin:0 0 13px}h3{font-size:17px;margin:0}
+    p{margin:0 0 12px}.muted{color:var(--muted)}.tiny{font-size:14px}.white-muted{color:#e5e1ff}
+    main{padding:18px 16px 24px}section[hidden]{display:none!important}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:19px;margin-bottom:14px;box-shadow:0 5px 20px rgba(34,41,95,.03)}
+    .hero-row{display:flex;align-items:center;gap:14px}.avatar{width:56px;height:56px;display:grid;place-items:center;background:#eae8ff;border-radius:19px;font-size:28px;flex-shrink:0}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px}.stack{display:grid;gap:12px}.gap{gap:9px}
+    .chip{border-radius:999px;background:#e9f7ee;color:#135b3c;padding:5px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+    .badge{display:inline-block;border-radius:999px;background:var(--soft);padding:5px 9px;font-size:12px;font-weight:700;color:#4037ab}
+    .btn{border:0;background:var(--primary);color:#fff;min-height:48px;padding:11px 16px;border-radius:14px;font-weight:750}
+    .btn.secondary{background:var(--soft);color:#37339c}.btn.ghost{background:#f0f2f8;color:var(--ink)}.btn.danger{background:#fff0f2;color:var(--danger)}
+    .btn.sm{min-height:38px;padding:8px 12px;font-size:14px}
+    .btn.full{width:100%}.inline{display:flex;gap:8px;flex-wrap:wrap}
+    .field{display:grid;gap:5px;color:#2e365a;font-weight:650;font-size:15px}
+    input,select,textarea{width:100%;min-height:48px;border:1.5px solid #ccd4e7;border-radius:13px;background:#fff;padding:11px 13px;color:#181f37}
+    textarea{min-height:76px;resize:vertical}
+    .hint{font-size:13px;color:var(--muted)}.divider{height:1px;background:var(--line);margin:18px 0}
+    .item{display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid #eaeef5;padding:13px 0}
+    .item:last-child{border-bottom:0;padding-bottom:0}.item:first-child{padding-top:4px}
+    .item-main{min-width:0;flex:1}.item-title{font-size:17px;font-weight:750;overflow-wrap:anywhere}.item-details{font-size:14px;color:var(--muted);margin-top:3px}
+    .item input[type=checkbox]{margin:5px 0 0;width:23px;height:23px;min-height:auto;accent-color:var(--primary);flex-shrink:0}
+    .done .item-title{text-decoration:line-through;color:#79839a}.delete{border:0;border-radius:12px;background:#fff0f2;color:var(--danger);font-weight:800;min-width:40px;min-height:40px}
+    .empty{color:var(--muted);padding:9px 0 3px}.pill-list{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.pill{border:1px solid #d8d5fc;border-radius:999px;padding:8px 11px;background:#f7f6ff;color:#3f3c96;font-weight:650;font-size:14px}
+    .conversation{border:1px solid var(--line);background:#fbfcff;border-radius:16px;padding:12px;display:grid;align-content:end;gap:10px;min-height:175px;max-height:300px;overflow-y:auto}
+    .bubble{padding:10px 12px;max-width:90%;border-radius:16px;background:#ebeafc;justify-self:start;overflow-wrap:anywhere}
+    .bubble.user{background:#5147c6;color:white;justify-self:end}.chat-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.chat-form input{min-width:0}
+    .notice{background:#fff8e8;color:#604313;border:1px solid #f3dea9;border-radius:16px;padding:13px 15px;font-size:14px;margin-bottom:14px}
+    .toast{position:fixed;bottom:calc(87px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#20294a;color:white;padding:12px 19px;border-radius:15px;box-shadow:0 10px 24px #1b225055;max-width:calc(100vw - 24px);z-index:10;font-size:15px;display:none}
+    .toast.show{display:block}.nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:rgba(255,255,255,.98);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:9px max(6px,calc((100vw - 700px)/2)) calc(9px + env(safe-area-inset-bottom));box-shadow:0 -8px 25px rgba(43,48,100,.05)}
+    .nav button{border:0;background:transparent;color:#626b85;display:grid;justify-items:center;gap:4px;padding:6px 0;min-height:55px;font-size:12px;font-weight:750}
+    .nav button[aria-current=page]{color:#4d42bc}.nav .icon{font-size:24px;line-height:1.2}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(min-width:720px){.nav{left:calc((100vw - 700px)/2);right:calc((100vw - 700px)/2);border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+    @media(prefers-reduced-motion:no-preference){.btn,.pill{transition:transform .12s}.btn:active,.pill:active{transform:scale(.98)}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="overline">Dein Alltag. Ein bisschen leichter.</div>
+    <h1>Mein KI-Begleiter <span aria-hidden="true">✦</span></h1>
+    <p class="white-muted" id="header-sub">Dein persönlicher Alltagshelfer – erste Testversion.</p>
+    <span class="chip">● Prototyp · ohne KI-Server</span>
+  </header>
+  <main>
+    <section id="tab-tag" aria-labelledby="heading-tag">
+      <div class="panel">
+        <div class="hero-row"><div class="avatar" aria-hidden="true">☀️</div><div><h2 id="heading-tag">Hallo, schön, dass du da bist!</h2><p class="muted" id="date-label"></p></div></div>
+      </div>
+      <div class="panel">
+        <div class="row"><h2>Dein Überblick</h2><span class="badge" id="open-count">0 offen</span></div>
+        <p class="muted" id="summary">Dein Tag ist bereit.</p>
+        <div id="today-list"></div>
+        <button class="btn secondary full" type="button" data-tab="ki" style="margin-top:14px">Etwas merken lassen</button>
+      </div>
+      <div class="panel"><h2>Besondere Tage</h2><div id="today-memories"></div><button class="btn ghost full" type="button" data-tab="gedaechtnis" style="margin-top:12px">Wichtige Tage ansehen</button></div>
+      <div class="notice">🔔 Diese Testversion <strong>zeigt</strong> dir deine Termine beim Öffnen. Sie sendet noch keine automatischen Mitteilungen – weder bei geöffneter noch bei geschlossener App.</div>
+    </section>
+
+    <section id="tab-ki" aria-labelledby="heading-ki" hidden>
+      <div class="panel">
+        <h2 id="heading-ki">Sprich mit deinem Begleiter</h2>
+        <p class="muted tiny">Du kannst etwas schreiben – und auf unterstützten Geräten per Mikrofon diktieren. Diese Demo erkennt einfache Aufgaben-Befehle, nutzt aber noch kein echtes KI-Modell.</p>
+        <div class="pill-list" aria-label="Beispielbefehle">
+          <button class="pill" type="button" data-example="Morgen 14 Uhr Arbeit">Morgen 14 Uhr Arbeit</button>
+          <button class="pill" type="button" data-example="Übermorgen 10 Uhr einkaufen">Übermorgen einkaufen</button>
+          <button class="pill" type="button" data-example="Heute 18 Uhr Sport">Heute Sport</button>
+        </div>
+        <div class="conversation" id="conversation" role="log" aria-live="polite" aria-label="Gespräch"></div>
+        <form class="chat-form" id="chat-form">
+          <label class="sr-only" for="chat-input">Deine Nachricht</label>
+          <input id="chat-input" autocomplete="off" placeholder="Was soll ich mir merken?" maxlength="180" required>
+          <button class="btn" type="submit">Senden</button>
+        </form>
+        <div class="inline" style="margin-top:10px"><button class="btn ghost sm" type="button" id="mic-btn" hidden>🎤 Diktieren</button><button class="btn ghost sm" type="button" id="say-btn">🔊 Antwort vorlesen</button></div>
+        <p class="hint" style="margin-top:10px">Bei Spracheingabe kann der Browser zur Verarbeitung einen externen Dienst verwenden. Bitte keine vertraulichen Informationen diktieren.</p>
+      </div>
+      <div class="panel"><h2>Neuen Termin eintragen</h2><form id="task-form" class="stack">
+        <label class="field">Was steht an?<input type="text" id="task-name" placeholder="Zum Beispiel: Frühschicht" maxlength="100" required></label>
+        <label class="field">Wann?<input type="datetime-local" id="task-datetime" required></label>
+        <button type="submit" class="btn full">Termin speichern</button>
+      </form></div>
+    </section>
+
+    <section id="tab-gedaechtnis" aria-labelledby="heading-gedaechtnis" hidden>
+      <div class="panel"><h2 id="heading-gedaechtnis">Mein Gedächtnis</h2><p class="muted">Geburtstage, Hochzeiten, Jubiläen und andere Momente, die du nicht vergessen möchtest.</p>
+        <form id="memory-form" class="stack">
+          <label class="field">Was möchtest du merken?<input id="memory-name" maxlength="100" placeholder="Zum Beispiel: Hochzeit von Anna" required></label>
+          <label class="field">Welches Datum?<input id="memory-date" type="date" required></label>
+          <label class="field"><span><input id="memory-repeat" type="checkbox" checked style="width:auto;min-height:auto;margin-right:8px;accent-color:var(--primary)">Jedes Jahr daran denken</span></label>
+          <button class="btn full" type="submit">Wichtigen Tag speichern</button>
+        </form></div>
+      <div class="panel"><h2>Deine besonderen Tage</h2><div id="memory-list"></div></div>
+    </section>
+
+    <section id="tab-einstellungen" aria-labelledby="heading-einstellungen" hidden>
+      <div class="panel"><h2 id="heading-einstellungen">Einstellungen</h2><p class="muted">Du entscheidest, wie sich dein Begleiter ausdrückt.</p>
+        <label class="field">Wie soll ich mit dir sprechen?
+          <select id="tone-select"><option value="freund">Freundlich und locker</option><option value="profi">Sachlich und professionell</option></select>
+        </label>
+        <div class="divider"></div>
+        <h3>Deine Daten gehören dir</h3>
+        <p class="muted tiny" style="margin-top:6px">Aufgaben, besondere Tage und Einstellungen werden nur in diesem Browser bzw. dieser installierten Web-App gespeichert. Es gibt keine Benutzerkonten oder Synchronisierung.</p>
+        <div class="stack"><button class="btn secondary full" type="button" id="export-btn">Daten sichern (JSON)</button><label class="field">Gesicherte Daten wiederherstellen<input type="file" id="import-input" accept=".json,application/json"></label><button class="btn danger full" type="button" id="clear-btn">Alle lokalen Daten löschen</button></div>
+      </div>
+      <div class="notice">⚠️ Das ist eine funktionierende Demo, <strong>noch kein selbstständiger KI-Assistent</strong>. Sie kann nicht auf andere iPhone-Apps zugreifen, E-Mails lesen oder bei ausgeschaltetem Handy handeln. Die Daten sind ohne Export nicht auf anderen Geräten verfügbar.</div>
+    </section>
+  </main>
+</div>
+<nav class="nav" aria-label="Hauptnavigation">
+  <button type="button" aria-current="page" data-tab="tag"><span class="icon" aria-hidden="true">☀️</span>Mein Tag</button>
+  <button type="button" data-tab="ki"><span class="icon" aria-hidden="true">💬</span>Meine KI</button>
+  <button type="button" data-tab="gedaechtnis"><span class="icon" aria-hidden="true">💜</span>Gedächtnis</button>
+  <button type="button" data-tab="einstellungen"><span class="icon" aria-hidden="true">⚙️</span>Einstellung</button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  'use strict';
+  const KEY='ki-begleiter-v1';
+  const $=id=>document.getElementById(id);
+  let state={tasks:[],memories:[],tone:'freund'};
+  let lastAnswer='';
+  let toastTimer;
+  const now=()=>new Date();
+  const pad=n=>String(n).padStart(2,'0');
+  const localDay=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const localStamp=d=>`${localDay(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const dateFromStamp=s=>{const d=new Date(s);return Number.isFinite(d.getTime())?d:null;};
+  const safeText=s=>String(s||'').trim().slice(0,180);
+  const germanDate=(d,withYear=true)=>d.toLocaleDateString('de-DE',withYear?{weekday:'short',day:'2-digit',month:'short',year:'numeric'}:{weekday:'short',day:'2-digit',month:'short'});
+  const timeText=d=>d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+  const msg=(text)=>{const el=$('toast');el.textContent=text;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)};
+  const uid=()=>globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  function load(){try{const raw=localStorage.getItem(KEY);if(!raw)return;const d=JSON.parse(raw);if(d&&typeof d==='object'){state.tasks=Array.isArray(d.tasks)?d.tasks.filter(validTask).slice(0,1000):[];state.memories=Array.isArray(d.memories)?d.memories.filter(validMemory).slice(0,1000):[];state.tone=d.tone==='profi'?'profi':'freund'}}catch(e){msg('Daten konnten nicht geladen werden.')}}
+  function validTask(t){return t&&typeof t.id==='string'&&typeof t.title==='string'&&t.title.length<=180&&typeof t.at==='string'&&dateFromStamp(t.at)!==null}
+  function validMemory(m){return m&&typeof m.id==='string'&&typeof m.title==='string'&&m.title.length<=180&&typeof m.date==='string'&&/^\d{4}-\d\d-\d\d$/.test(m.date)&&dateFromStamp(m.date+'T12:00')!==null}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){msg('Speichern fehlgeschlagen: Bitte Speicherplatz prüfen.');return false}}
+  function build(tag,className,text){const el=document.createElement(tag);if(className)el.className=className;if(text!==undefined)el.textContent=text;return el}
+  function addTask(title,at){title=safeText(title).slice(0,100);const d=dateFromStamp(at);if(!title||!d){msg('Bitte Termin und Uhrzeit prüfen.');return false}state.tasks.push({id:uid(),title,at:localStamp(d),done:false});save();render();return true}
+  function addMemory(title,date,repeat){title=safeText(title).slice(0,100);const d=dateFromStamp(date+'T12:00');if(!title||!d||localDay(d)!==date){msg('Bitte das Datum prüfen.');return false}state.memories.push({id:uid(),title,date,repeat:!!repeat});save();render();return true}
+  function memoryWhen(m){const source=dateFromStamp(m.date+'T12:00');if(!source)return null;if(!m.repeat)return source;const today=new Date();if(source.getFullYear()>today.getFullYear())return source;today.setHours(12,0,0,0);let year=today.getFullYear();let candidate=new Date(year,source.getMonth(),source.getDate(),12);if(candidate.getMonth()!==source.getMonth())candidate=new Date(year,2,1,12);if(candidate<today){year++;candidate=new Date(year,source.getMonth(),source.getDate(),12);if(candidate.getMonth()!==source.getMonth())candidate=new Date(year,2,1,12)}return candidate}
+  function diffDays(d){const today=new Date();const a=Date.UTC(today.getFullYear(),today.getMonth(),today.getDate());const b=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate());return Math.round((b-a)/86400000)}
+  function renderTaskList(parent,tasks){parent.replaceChildren();if(!tasks.length){parent.append(build('p','empty','Noch keine Aufgaben. Du kannst unter „Meine KI“ eine erstellen.'));return}
+    tasks.forEach(t=>{const when=dateFromStamp(t.at);const item=build('div','item'+(t.done?' done':''));const check=build('input');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label',`${t.title} als erledigt markieren`);check.addEventListener('change',()=>{t.done=check.checked;save();render()});item.append(check);
+      const center=build('div','item-main');center.append(build('div','item-title',t.title));center.append(build('div','item-details',`${germanDate(when)} · ${timeText(when)} Uhr`));item.append(center);
+      const del=build('button','delete','×');del.type='button';del.setAttribute('aria-label',`${t.title} löschen`);del.addEventListener('click',()=>{if(confirm(`Aufgabe „${t.title}“ löschen?`)){state.tasks=state.tasks.filter(x=>x.id!==t.id);save();render()}});item.append(del);parent.append(item)})
+  }
+  function render(){const d=now();$('date-label').textContent=germanDate(d);$('heading-tag').textContent=state.tone==='freund'?'Schön, dass du da bist!':'Dein Tagesüberblick';
+    $('header-sub').textContent=state.tone==='freund'?'Ich helfe dir, deinen Alltag im Blick zu behalten.':'Termine und Erinnerungen an einem Ort.';
+    const all=state.tasks.slice().sort((a,b)=>a.at.localeCompare(b.at));const notDone=all.filter(t=>!t.done);$('open-count').textContent=`${notDone.length} offen`;
+    const upcoming=notDone.filter(t=>dateFromStamp(t.at)>=new Date(d.getTime()-86400000));const display=(upcoming.length?upcoming:notDone).slice(0,5);
+    $('summary').textContent=notDone.length?`Du hast ${notDone.length} offene ${notDone.length===1?'Aufgabe':'Aufgaben'}.`:'Keine offenen Aufgaben – dein Tag ist frei.';
+    renderTaskList($('today-list'),display);
+    $('today-memories').replaceChildren();const mm=state.memories.map(m=>({m,when:memoryWhen(m)})).filter(x=>x.when).sort((a,b)=>a.when-b.when).slice(0,3);
+    if(!mm.length)$('today-memories').append(build('p','empty','Hier erscheinen wichtige Ereignisse.'));
+    mm.forEach(({m,when})=>{const wrap=build('div','item');const center=build('div','item-main');center.append(build('div','item-title',m.title));const dd=diffDays(when);center.append(build('div','item-details',`${germanDate(when)} · ${dd===0?'heute':dd===1?'morgen':dd>0?`in ${dd} Tagen`:'liegt zurück'}`));wrap.append(build('span','', '🎈'));wrap.append(center);$('today-memories').append(wrap)});
+    $('memory-list').replaceChildren();if(!state.memories.length)$('memory-list').append(build('p','empty','Noch keine besonderen Tage gespeichert.'));
+    state.memories.slice().sort((a,b)=>(memoryWhen(a)?.getTime()??Infinity)-(memoryWhen(b)?.getTime()??Infinity)).forEach(m=>{
+      const row=build('div','item');const center=build('div','item-main');center.append(build('div','item-title',m.title));const when=dateFromStamp(m.date+'T12:00');center.append(build('div','item-details',`${germanDate(when)} · ${m.repeat?'jährlich':'einmalig'}`));row.append(build('span','','💜'),center);
+      const del=build('button','delete','×');del.type='button';del.setAttribute('aria-label',`${m.title} löschen`);del.onclick=()=>{if(confirm(`„${m.title}“ löschen?`)){state.memories=state.memories.filter(x=>x.id!==m.id);save();render()}};row.append(del);$('memory-list').append(row)
+    });$('tone-select').value=state.tone;
+  }
+  function switchTab(id){for(const name of ['tag','ki','gedaechtnis','einstellungen']){$('tab-'+name).hidden=name!==id}document.querySelectorAll('[data-tab]').forEach(b=>{if(b.closest('nav')){if(b.dataset.tab===id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')}});window.scrollTo({top:0,behavior:'instant'})}
+  function sayLine(body,isUser){const el=build('div','bubble'+(isUser?' user':''),body);$('conversation').append(el);$('conversation').scrollTop=$('conversation').scrollHeight}
+  function parseDate(text){const str=text.toLocaleLowerCase('de-DE');const base=new Date();base.setHours(12,0,0,0);const md=str.match(/\b(?:am\s+)?(\d{1,2})[.\/](\d{1,2})(?:[.\/](\d{2,4}))?\b/);
+    if(md){let year=md[3]?Number(md[3]):base.getFullYear();if(year<100)year+=2000;const d=new Date(year,Number(md[2])-1,Number(md[1]),12);if(d.getDate()!==Number(md[1])||d.getMonth()!==Number(md[2])-1)return null;if(!md[3]&&d<base)d.setFullYear(d.getFullYear()+1);return d}
+    if(/\bübermorgen\b/.test(str)){base.setDate(base.getDate()+2);return base}
+    if(/\bmorgen\b/.test(str)){base.setDate(base.getDate()+1);return base}
+    if(/\bheute\b/.test(str))return base;
+    const weekdays=['sonntag','montag','dienstag','mittwoch','donnerstag','freitag','samstag'];const match=weekdays.find(w=>new RegExp('\\b'+w+'\\b').test(str));if(match){let delta=(weekdays.indexOf(match)-base.getDay()+7)%7;if(delta===0)delta=7;base.setDate(base.getDate()+delta);return base}return null
+  }
+  function parseTime(text){const m=text.match(/\b(?:um\s+)?(\d{1,2})(?:[:.](\d{2}))\s*(?:uhr)?\b/i)||text.match(/\b(?:um\s+)?(\d{1,2})\s*uhr\b/i);if(!m)return null;const h=+m[1],mi=+(m[2]||0);return h<=23&&mi<=59?{h,mi}:null}
+  function titleFrom(text){let s=text.replace(/\b(?:übermorgen|morgen|heute|montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\b/gi,'').replace(/\b(?:am\s+)?\d{1,2}[.\/]\d{1,2}(?:[.\/]\d{2,4})?\b/gi,'').replace(/\b(?:um\s*)?\d{1,2}(?:[:.]\d{2})?\s*uhr\b/gi,'').replace(/\b(?:um\s+)\d{1,2}[:.]\d{2}\b/gi,'').replace(/\b(ich muss|ich habe|ich hab|bitte erinnere mich|erinnere mich|bitte|daran|an|einen termin|ein termin)\b/gi,'').replace(/[.!?,]/g,' ').replace(/\s+/g,' ').trim();if(!s||s.length<3)s='Termin';return s[0].toLocaleUpperCase('de-DE')+s.slice(1)}
+  function respond(text){const d=parseDate(text),time=parseTime(text);
+    if(d&&time){d.setHours(time.h,time.mi,0,0);const title=titleFrom(text);if(addTask(title,localStamp(d)))return state.tone==='freund'?`Hab ich mir gemerkt! 💜 ${title}: ${germanDate(d)} um ${timeText(d)} Uhr.`:`Termin gespeichert: ${title}, ${germanDate(d)}, ${timeText(d)} Uhr.`}
+    const lower=text.toLocaleLowerCase('de-DE');if(/\b(hallo|hey|guten morgen|guten tag)\b/.test(lower))return state.tone==='freund'?'Hey! 💜 Erzähl mir, was du heute vorhast.':'Guten Tag. Ich kann Termine und wichtige Tage speichern.';
+    if(/\b(danke|super|toll)\b/.test(lower))return state.tone==='freund'?'Immer gerne. 😊':'Gern geschehen.';
+    if(/\b(traurig|einsam|allein|schlecht|sorge|angst)\b/.test(lower))return state.tone==='freund'?'Das klingt belastend. Wenn du magst, erzähl mir mehr. Nur zur Einordnung: Ich bin hier noch eine einfache Demo, keine echte Gesprächs-KI.':'Das klingt schwierig. Diese Demo kann noch keine längeren Gespräche führen.';
+    return state.tone==='freund'?'Das habe ich noch nicht richtig verstanden. 💜 Probier mal: „Morgen 14 Uhr Arbeit“. Für wichtige Tage gibt es den Bereich „Gedächtnis“.':'Befehl nicht erkannt. Beispiel: „Morgen 14 Uhr Arbeit“. Weitere Einträge können über die Formulare erstellt werden.';
+  }
+  function send(text){text=safeText(text);if(!text)return;sayLine(text,true);lastAnswer=respond(text);sayLine(lastAnswer,false)}
+  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+  document.querySelectorAll('[data-example]').forEach(b=>b.addEventListener('click',()=>{$('chat-input').value=b.dataset.example;$('chat-input').focus()}));
+  $('chat-form').addEventListener('submit',e=>{e.preventDefault();const t=$('chat-input').value;$('chat-input').value='';send(t)});
+  $('task-form').addEventListener('submit',e=>{e.preventDefault();if(addTask($('task-name').value,$('task-datetime').value)){$('task-name').value='';msg('Termin gespeichert.');switchTab('tag')}});
+  $('memory-form').addEventListener('submit',e=>{e.preventDefault();if(addMemory($('memory-name').value,$('memory-date').value,$('memory-repeat').checked)){$('memory-name').value='';msg('Wichtiger Tag gespeichert.')}});
+  $('tone-select').addEventListener('change',e=>{state.tone=e.target.value==='profi'?'profi':'freund';save();render();msg('Gesprächsstil gespeichert.')});
+  $('say-btn').addEventListener('click',()=>{if(!('speechSynthesis' in window)){msg('Vorlesen wird hier nicht unterstützt.');return}if(!lastAnswer){msg('Schreibe zuerst eine Nachricht.');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang='de-DE';u.rate=.95;speechSynthesis.speak(u)});
+  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(Recognition){$('mic-btn').hidden=false;let rec;let recording=false;$('mic-btn').addEventListener('click',()=>{if(recording){rec.stop();return}try{rec=new Recognition();rec.lang='de-DE';rec.interimResults=false;rec.maxAlternatives=1;rec.onstart=()=>{recording=true;$('mic-btn').textContent='⏹ Aufnahme stoppen'};rec.onend=()=>{recording=false;$('mic-btn').textContent='🎤 Diktieren'};rec.onerror=()=>msg('Spracherkennung nicht verfügbar oder nicht erlaubt.');rec.onresult=e=>{$('chat-input').value=e.results[0][0].transcript;msg('Text erkannt – zum Speichern auf „Senden“ tippen.')};rec.start()}catch(e){msg('Spracherkennung konnte nicht starten.')}})}
+  $('export-btn').addEventListener('click',()=>{try{const blob=new Blob([JSON.stringify({version:1,...state},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`ki-begleiter-sicherung-${localDay(now())}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),20000);msg('Datensicherung gestartet.')}catch(e){msg('Export fehlgeschlagen.')}});
+  $('import-input').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>2000000)throw Error('Datei zu groß.');const obj=JSON.parse(await file.text());if(!obj||!Array.isArray(obj.tasks)||!Array.isArray(obj.memories))throw Error('Ungültige Sicherung.');const tasks=obj.tasks.filter(validTask).slice(0,1000).map(t=>({id:t.id,title:t.title,at:t.at,done:!!t.done}));const memories=obj.memories.filter(validMemory).slice(0,1000).map(m=>({id:m.id,title:m.title,date:m.date,repeat:!!m.repeat}));if(!confirm(`Sicherung importieren? Deine aktuellen Daten werden durch ${tasks.length} Aufgaben und ${memories.length} besondere Tage ersetzt.`))return;state={tasks,memories,tone:obj.tone==='profi'?'profi':'freund'};save();render();msg('Sicherung wiederhergestellt.')}catch(err){msg('Import nicht möglich: Bitte gültige JSON-Sicherung auswählen.')}finally{e.target.value=''}});
+  $('clear-btn').addEventListener('click',()=>{if(confirm('Wirklich alle Aufgaben und besonderen Tage auf diesem Gerät löschen?')){state={tasks:[],memories:[],tone:'freund'};save();render();msg('Lokale Daten gelöscht.')}});
+  load();$('task-datetime').value=localStamp(new Date(Date.now()+3600000));$('memory-date').value=localDay(now());render();lastAnswer='Hallo! Ich bin deine erste Testversion. Sag zum Beispiel: Morgen 14 Uhr Arbeit.';sayLine(lastAnswer,false);
+  if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});setInterval(()=>{if(!document.hidden)render()},60000);
+})();
+</script>
+</body>
+</html>
