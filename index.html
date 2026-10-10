@@ -6,11 +6,11 @@
   <meta name="theme-color" content="#15172e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="KI-Begleiter">
+  <meta name="apple-mobile-web-app-title" content="MILO AI">
   <meta name="description" content="Ein persönlicher Alltagsbegleiter als erste iPhone-Demo: Aufgaben, wichtige Tage und ein einfacher Gesprächsbereich.">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icon-192.png">
-  <title>Mein KI-Begleiter · Prototyp</title>
+  <title>MILO AI · Frühschicht & Arbeitsweg</title>
   <style>
     :root{color-scheme:light;--ink:#1d2441;--muted:#58627b;--line:#dfe4f0;--primary:#5755d9;--primary-ink:#fff;--soft:#eeedff;--panel:#fff;--bg:#f5f7fc;--success:#167e56;--danger:#b53150}
     *{box-sizing:border-box}
@@ -48,21 +48,34 @@
     .bubble.user{background:#5147c6;color:white;justify-self:end}.chat-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.chat-form input{min-width:0}
     .notice{background:#fff8e8;color:#604313;border:1px solid #f3dea9;border-radius:16px;padding:13px 15px;font-size:14px;margin-bottom:14px}
     .toast{position:fixed;bottom:calc(87px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#20294a;color:white;padding:12px 19px;border-radius:15px;box-shadow:0 10px 24px #1b225055;max-width:calc(100vw - 24px);z-index:10;font-size:15px;display:none}
-    .toast.show{display:block}.nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:rgba(255,255,255,.98);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:9px max(6px,calc((100vw - 700px)/2)) calc(9px + env(safe-area-inset-bottom));box-shadow:0 -8px 25px rgba(43,48,100,.05)}
-    .nav button{border:0;background:transparent;color:#626b85;display:grid;justify-items:center;gap:4px;padding:6px 0;min-height:55px;font-size:12px;font-weight:750}
+    .toast.show{display:block}.nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:rgba(255,255,255,.98);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:9px max(6px,calc((100vw - 700px)/2)) calc(9px + env(safe-area-inset-bottom));box-shadow:0 -8px 25px rgba(43,48,100,.05)}
+    .nav button{border:0;background:transparent;color:#626b85;display:grid;justify-items:center;gap:4px;padding:6px 0;min-height:55px;font-size:11px;font-weight:750}
     .nav button[aria-current=page]{color:#4d42bc}.nav .icon{font-size:24px;line-height:1.2}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     @media(min-width:720px){.nav{left:calc((100vw - 700px)/2);right:calc((100vw - 700px)/2);border-left:1px solid var(--line);border-right:1px solid var(--line)}}
     @media(prefers-reduced-motion:no-preference){.btn,.pill{transition:transform .12s}.btn:active,.pill:active{transform:scale(.98)}}
+
+    .shift-list{display:grid;gap:10px}.shiftrow{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:15px;background:white}
+    .shiftmark{height:42px;width:7px;border-radius:99px;flex-shrink:0;background:#c7cede}.shiftmark.frueh{background:#36be6c}.shiftmark.spaet{background:#2bafc1}.shiftmark.nacht{background:#8578ed}.shiftmark.xtage{background:#ea566b}.shiftmark.frei{background:#ffbc4b}.shiftmark.urlaub{background:#f06cbb}
+    .shift-detail{flex:1;min-width:0}.shift-detail strong{display:block;font-size:15px}.shift-detail small{display:block;color:var(--muted);font-size:13px}
+    .shift-warning{font-weight:750;color:#963440}.shiftrow.conflict{background:#fff6ee;border-color:#f1c99c}
+    .shift-hero{padding:16px;background:#f3f2ff;border-radius:15px;margin-top:12px}.shift-hero strong{font-size:22px;display:block}
+    .shift-chip{font-size:13px;background:#f0f2f9;border-radius:9px;padding:5px 7px;color:#373a65;white-space:nowrap}
+    .shiftrow button{border:0;background:#fff0f2;border-radius:9px;padding:8px;color:#a62d52}
+    .shift-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .shift-grid .field{min-width:0}
+    .shift-bold{font-weight:800;color:#3e3897}
+    .route-inline{display:inline-block!important;margin-top:6px;background:#edf9fd!important;color:#166477!important;font-size:13px;font-weight:700;border-radius:9px;padding:7px 10px!important}
+    @media(max-width:370px){.nav button{font-size:10px}.nav .icon{font-size:21px}}
   </style>
 </head>
 <body>
 <div class="shell">
   <header>
     <div class="overline">Dein Alltag. Ein bisschen leichter.</div>
-    <h1>Mein KI-Begleiter <span aria-hidden="true">✦</span></h1>
-    <p class="white-muted" id="header-sub">Dein persönlicher Alltagshelfer – erste Testversion.</p>
-    <span class="chip">● Prototyp · ohne KI-Server</span>
+    <h1>MILO AI <span aria-hidden="true">✦</span></h1>
+    <p class="white-muted" id="header-sub">Dein Begleiter für Frühschichten und den Arbeitsweg.</p>
+    <span class="chip">● Version 2.1 · Schichtbegleiter</span>
   </header>
   <main>
     <section id="tab-tag" aria-labelledby="heading-tag">
@@ -74,6 +87,7 @@
         <p class="muted" id="summary">Dein Tag ist bereit.</p>
         <div id="today-list"></div>
         <button class="btn secondary full" type="button" data-tab="ki" style="margin-top:14px">Etwas merken lassen</button>
+        <button class="btn ghost full" type="button" data-tab="schichten" style="margin-top:8px">⏰ Schichten & Weckzeiten ansehen</button>
       </div>
       <div class="panel"><h2>Besondere Tage</h2><div id="today-memories"></div><button class="btn ghost full" type="button" data-tab="gedaechtnis" style="margin-top:12px">Wichtige Tage ansehen</button></div>
       <div class="notice">🔔 Diese Testversion <strong>zeigt</strong> dir deine Termine beim Öffnen. Sie sendet noch keine automatischen Mitteilungen – weder bei geöffneter noch bei geschlossener App.</div>
@@ -115,6 +129,56 @@
       <div class="panel"><h2>Deine besonderen Tage</h2><div id="memory-list"></div></div>
     </section>
 
+
+    <section id="tab-schichten" aria-labelledby="heading-schichten" hidden>
+      <div class="panel">
+        <div class="row"><h2 id="heading-schichten">⏰ MILO Schichtassistent</h2><span class="badge">Test</span></div>
+        <p class="muted">Frühschichten zuerst: 05:00 Uhr Beginn → 03:30 Uhr aufstehen. Spät- und Nachtschichten: Arbeitsweg prüfen. Dein Dienstplan bleibt auf diesem Gerät.</p>
+        <div class="notice"><strong>Wichtig:</strong> 03:30 Uhr ist eine <strong>berechnete Weckzeit – kein gestellter Wecker</strong>! Diese Web-App kann keine zuverlässigen iPhone-Wecker einrichten oder dich im Hintergrund wecken. Bitte stelle für jede Frühschicht einen echten Wecker in der iPhone-Uhr-App.</div>
+        <label class="field">Vorlauf für Frühschichten (Minuten vor Beginn)
+          <input type="number" id="shift-lead" min="0" max="360" step="5" value="90" inputmode="numeric">
+        </label>
+        <p class="hint" style="margin:7px 0 0"><strong>90 Minuten = 03:30 Uhr bei 05:00 Uhr Frühschicht.</strong> Nur für Frühschichten. Änderbar.</p>
+        <div class="shift-hero" id="shift-next" role="status">Noch kein Dienstplan importiert.</div>
+        <button class="btn secondary full" type="button" id="shift-copy" style="margin-top:10px" disabled>Weckzeit kopieren</button>
+      </div>
+      <div class="panel">
+        <h2>Dein Schichtplan</h2>
+        <p class="muted tiny">Importiere deine private Dienstplan-Datei oder erfasse einzelne Schichten. Bei Urlaub und Arbeit am selben Datum wird vorsichtshalber <strong>keine Weckzeit berechnet</strong>, bis du den Konflikt geklärt hast.</p>
+        <label class="field">Private Dienstplan-Datei auswählen
+          <input id="shift-import" type="file" accept=".json,application/json">
+        </label>
+        <div class="inline" style="margin-top:12px">
+          <button class="btn secondary sm" type="button" id="shift-export">Plan privat sichern</button>
+          <button class="btn danger sm" type="button" id="shift-clear">Schichtplan löschen</button>
+        </div>
+        <div class="divider"></div>
+        <h3>Schicht manuell hinzufügen</h3>
+        <form id="shift-form" class="stack" style="margin-top:12px">
+          <div class="shift-grid">
+            <label class="field">Datum<input type="date" id="shift-date" required></label>
+            <label class="field">Beginn<input type="time" id="shift-start" value="05:00" required></label>
+          </div>
+          <label class="field">Schichtart
+            <select id="shift-type"><option value="Früh">Früh</option><option value="Spät">Spät</option><option value="Nacht">Nacht</option><option value="X Tage">X Tage</option><option value="Frei">Frei</option><option value="Urlaub">Urlaub</option></select>
+          </label>
+          <button class="btn full" type="submit">Eintrag lokal speichern</button>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="row"><h2>🚗 Arbeitsweg (Spät & Nacht)</h2><span class="badge">Manuell</span></div>
+        <p class="muted tiny">Hinterlege deine übliche Strecke nur auf diesem iPhone. „Route prüfen“ öffnet Apple Karten und zeigt dir dort mögliche Verkehrsprobleme. MILO überwacht den Verkehr <strong>noch nicht automatisch</strong>.</p>
+        <div class="stack">
+          <label class="field">Startadresse (z. B. Zuhause)<input id="route-from" maxlength="180" placeholder="Straße, Ort" autocomplete="off"></label>
+          <label class="field">Arbeitsadresse<input id="route-to" maxlength="180" placeholder="Straße, Ort" autocomplete="off"></label>
+          <button type="button" class="btn secondary full" id="route-check">Route in Apple Karten prüfen ↗</button>
+        </div>
+        <p class="hint" style="margin-top:9px">Erst beim Öffnen der Route werden die eingetragenen Adressen an Apple Karten übergeben. Gib keine persönlichen Adressen in GitHub ein.</p>
+      </div>
+      <div class="panel"><div class="row"><h2>Geplante Tage</h2><span class="badge" id="shift-count">0</span></div><div id="shift-list" class="shift-list" aria-live="polite"></div></div>
+      <div class="notice">🔒 Bitte lade deinen persönlichen Schichtplan <strong>niemals</strong> in das öffentliche GitHub-Repository hoch. Lade ihn nur innerhalb deiner MILO-App über „Private Dienstplan-Datei auswählen“. Es werden keine Schichten an GitHub übertragen.</div>
+    </section>
+
     <section id="tab-einstellungen" aria-labelledby="heading-einstellungen" hidden>
       <div class="panel"><h2 id="heading-einstellungen">Einstellungen</h2><p class="muted">Du entscheidest, wie sich dein Begleiter ausdrückt.</p>
         <label class="field">Wie soll ich mit dir sprechen?
@@ -133,6 +197,7 @@
   <button type="button" aria-current="page" data-tab="tag"><span class="icon" aria-hidden="true">☀️</span>Mein Tag</button>
   <button type="button" data-tab="ki"><span class="icon" aria-hidden="true">💬</span>Meine KI</button>
   <button type="button" data-tab="gedaechtnis"><span class="icon" aria-hidden="true">💜</span>Gedächtnis</button>
+  <button type="button" data-tab="schichten"><span class="icon" aria-hidden="true">⏰</span>Schichten</button>
   <button type="button" data-tab="einstellungen"><span class="icon" aria-hidden="true">⚙️</span>Einstellung</button>
 </nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -183,7 +248,7 @@
       const del=build('button','delete','×');del.type='button';del.setAttribute('aria-label',`${m.title} löschen`);del.onclick=()=>{if(confirm(`„${m.title}“ löschen?`)){state.memories=state.memories.filter(x=>x.id!==m.id);save();render()}};row.append(del);$('memory-list').append(row)
     });$('tone-select').value=state.tone;
   }
-  function switchTab(id){for(const name of ['tag','ki','gedaechtnis','einstellungen']){$('tab-'+name).hidden=name!==id}document.querySelectorAll('[data-tab]').forEach(b=>{if(b.closest('nav')){if(b.dataset.tab===id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')}});window.scrollTo({top:0,behavior:'instant'})}
+  function switchTab(id){for(const name of ['tag','ki','gedaechtnis','schichten','einstellungen']){$('tab-'+name).hidden=name!==id}document.querySelectorAll('[data-tab]').forEach(b=>{if(b.closest('nav')){if(b.dataset.tab===id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')}});window.scrollTo({top:0,behavior:'instant'})}
   function sayLine(body,isUser){const el=build('div','bubble'+(isUser?' user':''),body);$('conversation').append(el);$('conversation').scrollTop=$('conversation').scrollHeight}
   function parseDate(text){const str=text.toLocaleLowerCase('de-DE');const base=new Date();base.setHours(12,0,0,0);const md=str.match(/\b(?:am\s+)?(\d{1,2})[.\/](\d{1,2})(?:[.\/](\d{2,4}))?\b/);
     if(md){let year=md[3]?Number(md[3]):base.getFullYear();if(year<100)year+=2000;const d=new Date(year,Number(md[2])-1,Number(md[1]),12);if(d.getDate()!==Number(md[1])||d.getMonth()!==Number(md[2])-1)return null;if(!md[3]&&d<base)d.setFullYear(d.getFullYear()+1);return d}
@@ -217,6 +282,117 @@
   load();$('task-datetime').value=localStamp(new Date(Date.now()+3600000));$('memory-date').value=localDay(now());render();lastAnswer='Hallo! Ich bin deine erste Testversion. Sag zum Beispiel: Morgen 14 Uhr Arbeit.';sayLine(lastAnswer,false);
   if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});setInterval(()=>{if(!document.hidden)render()},60000);
+})();
+</script>
+<script>
+(() => {
+  'use strict';
+  const KEY='milo-schichten-v3';
+  const OLD_KEY='milo-schichten-v2';
+  const $=id=>document.getElementById(id);
+  const validTypes=new Set(['Früh','Spät','Nacht','X Tage','Frei','Urlaub']);
+  const isWork=t=>['Früh','Spät','Nacht','X Tage'].includes(t);
+  const isDay=d=>typeof d==='string' && /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(d) && (()=>{let x=new Date(d+'T12:00');return !isNaN(+x)&&x.getFullYear()===Number(d.slice(0,4))&&(x.getMonth()+1)===Number(d.slice(5,7))&&x.getDate()===Number(d.slice(8,10))})();
+  const isTime=t=>typeof t==='string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(t);
+  const dayFmt=d=>new Date(d+'T12:00').toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});
+  const dateFmt=d=>d.toLocaleString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  const normalize=e=>{if(!e||!isDay(e.date)||!validTypes.has(e.type)||!isTime(e.start))return null;return {date:e.date,type:e.type,start:e.start};};
+  let shiftData={leadMinutes:90,shifts:[],route:{from:'',to:''}};
+  try{
+    const old=localStorage.getItem(OLD_KEY);
+    const saved=localStorage.getItem(KEY);
+    const data=JSON.parse(saved||old||'null');
+    if(data&&Array.isArray(data.shifts)){
+      shiftData.shifts=data.shifts.map(normalize).filter(Boolean).slice(0,500);
+      // v2 was based on an assumed 60 minutes. Upgrade to user's chosen 90 minutes.
+      shiftData.leadMinutes=saved && Number.isInteger(data.leadMinutes)&&data.leadMinutes>=0&&data.leadMinutes<=360?data.leadMinutes:90;
+      if(saved&&data.route&&typeof data.route==='object'){
+        shiftData.route.from=String(data.route.from||'').slice(0,180);
+        shiftData.route.to=String(data.route.to||'').slice(0,180);
+      }
+    }
+  }catch(e){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(shiftData));return true}catch(e){alert('Speichern nicht möglich. Bitte iPhone-Speicher prüfen.');return false}};
+  const make=(tag,cls,txt)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(txt!=null)el.textContent=txt;return el};
+  const typeClass=t=>({'Früh':'frueh','Spät':'spaet','Nacht':'nacht','X Tage':'xtage','Frei':'frei','Urlaub':'urlaub'}[t]||'');
+  const grouped=()=>{const by=new Map();for(const e of shiftData.shifts){if(!by.has(e.date))by.set(e.date,[]);by.get(e.date).push(e)}return [...by].sort((a,b)=>a[0].localeCompare(b[0]))};
+  const wakeAt=(date,start)=>new Date(new Date(date+'T'+start+':00').getTime()-shiftData.leadMinutes*60000);
+  function rows(){return grouped().map(([date,entries])=>{
+    const conflicted=new Set(entries.map(e=>e.type+'|'+e.start)).size>1;
+    const unique=entries.length===1&&!conflicted?entries[0]:null;
+    const start=unique&&isWork(unique.type)?new Date(date+'T'+unique.start+':00'):null;
+    const early=unique?.type==='Früh'&&start?unique:null;
+    return {date,entries,conflicted,unique,start,early,wake:early?wakeAt(date,early.start):null};
+  })}
+  let nextAlarm=null;
+  function copy(text){if(navigator.clipboard?.writeText){navigator.clipboard.writeText(text).then(()=>alert('Weckzeit kopiert. Bitte in der iPhone-Uhr-App einen echten Wecker stellen.')).catch(()=>prompt('Kopiere die Weckzeit:',text));}else{prompt('Kopiere die Weckzeit:',text)}}
+  function openRoute(){
+    const from=shiftData.route.from.trim(),to=shiftData.route.to.trim();
+    if(!from||!to){alert('Bitte zuerst Start- und Arbeitsadresse in MILO eintragen.');return}
+    const url='https://maps.apple.com/?saddr='+encodeURIComponent(from)+'&daddr='+encodeURIComponent(to)+'&dirflg=d';
+    window.open(url,'_blank','noopener,noreferrer');
+  }
+  function render(){
+    $('shift-lead').value=String(shiftData.leadMinutes);
+    $('route-from').value=shiftData.route.from;
+    $('route-to').value=shiftData.route.to;
+    const listRows=rows();$('shift-count').textContent=String(shiftData.shifts.length)+' Einträge';
+    const current=new Date(),next=listRows.find(r=>r.early && r.start>current);
+    const hero=$('shift-next');hero.replaceChildren();nextAlarm=null;
+    if(next){
+      nextAlarm={date:next.date,start:next.early.start,wake:next.wake};
+      hero.append(make('span','tiny','Deine nächste eindeutige Frühschicht:'));
+      hero.append(make('strong','',dayFmt(next.date)+' · '+next.early.start+' Uhr'));
+      hero.append(make('p','shift-bold','Aufstehen: '+dateFmt(next.wake)+' Uhr'));
+    }else{hero.append(make('strong','',listRows.length?'Keine weitere eindeutige Frühschicht im Plan':'Noch kein Dienstplan importiert'));}
+    hero.append(make('p','tiny muted','Nur Vorschau – noch kein iPhone-Wecker gestellt!'));
+    $('shift-copy').disabled=!nextAlarm;
+    const list=$('shift-list');list.replaceChildren();
+    if(!listRows.length){list.append(make('p','empty','Noch keine Schichten. Importiere privat deinen Plan oder füge einen Eintrag hinzu.'));return}
+    const since=new Date();since.setDate(since.getDate()-5);
+    const visible=listRows.filter(r=>new Date(r.date+'T23:59:00')>=since).slice(0,150);
+    if(!visible.length){list.append(make('p','empty','Im Plan stehen nur vergangene Schichten.'));return}
+    for(const r of visible){
+      const box=make('div','shiftrow'+(r.conflicted?' conflict':''));box.append(make('div','shiftmark '+typeClass(r.entries[0].type)));
+      const center=make('div','shift-detail');center.append(make('strong','',dayFmt(r.date)));
+      center.append(make('small','',r.entries.map(e=>e.type+(isWork(e.type)?' '+e.start+' Uhr':'')).join(' + ')));
+      if(r.conflicted)center.append(make('small','shift-warning','⚠️ Urlaub/Schichten überschneiden sich – prüfen, kein Weckvorschlag'));
+      else if(r.early){center.append(make('small','shift-bold','Weckzeit-Vorschau: '+dateFmt(r.wake)+' Uhr'));center.append(make('small','','⚠️ Echten iPhone-Wecker selbst stellen'));}
+      else if(r.unique&&['Spät','Nacht'].includes(r.unique.type)){
+        center.append(make('small','','Arbeitsweg vor Abfahrt prüfen'));
+        const route=make('button','route-inline','🚗 Route');route.type='button';route.title='In Apple Karten öffnen – keine Hintergrundüberwachung';route.addEventListener('click',openRoute);center.append(route);
+      }else center.append(make('small','','Kein Frühschicht-Wecker vorgesehen'));
+      box.append(center);
+      const del=make('button','','×');del.type='button';del.setAttribute('aria-label','Alle Einträge am '+r.date+' löschen');
+      del.addEventListener('click',()=>{if(confirm('Alle Einträge für '+dayFmt(r.date)+' löschen?')){shiftData.shifts=shiftData.shifts.filter(s=>s.date!==r.date);save();render()}});
+      box.append(del);list.append(box);
+    }
+  }
+  $('shift-copy').addEventListener('click',()=>{if(nextAlarm)copy('Frühschicht am '+dayFmt(nextAlarm.date)+' um '+nextAlarm.start+' Uhr – Wecker '+nextAlarm.wake.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr. (Noch nicht gestellt)')});
+  $('shift-lead').addEventListener('change',e=>{const v=Number(e.target.value);if(!Number.isInteger(v)||v<0||v>360){alert('Bitte 0 bis 360 Minuten eingeben.');e.target.value=shiftData.leadMinutes;return}shiftData.leadMinutes=v;save();render()});
+  $('shift-type').addEventListener('change',e=>{const t=e.target.value;$('shift-start').value=({'Früh':'05:00','Spät':'13:00','Nacht':'21:00','X Tage':'07:00','Frei':'09:00','Urlaub':'09:00'}[t]||'05:00')});
+  $('shift-form').addEventListener('submit',e=>{e.preventDefault();const entry=normalize({date:$('shift-date').value,type:$('shift-type').value,start:$('shift-start').value});if(!entry){alert('Datum und Beginn prüfen.');return}shiftData.shifts.push(entry);save();render();alert('Schicht lokal gespeichert. Kein echter Wecker gestellt!')});
+  $('shift-import').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      if(file.size>1024*1024)throw Error('Datei zu groß');
+      const data=JSON.parse(await file.text());if(!data||!Array.isArray(data.shifts)||data.shifts.length>500)throw Error('Ungültiger Dienstplan');
+      const shifts=data.shifts.map(normalize);if(shifts.some(s=>s===null))throw Error('Ungültige Daten/Schicht');
+      const lead=Number.isInteger(data.leadMinutes)&&data.leadMinutes>=0&&data.leadMinutes<=360?data.leadMinutes:shiftData.leadMinutes;
+      if(!confirm(shifts.length+' Schichteinträge privat importieren? Bisherige Schichten werden ersetzt.\n\nDie App stellt dadurch KEINE Wecker!'))return;
+      shiftData.shifts=shifts;shiftData.leadMinutes=lead;save();render();alert('Privat importiert. Urlaubsüberschneidungen bitte prüfen.');
+    }catch(err){alert('Dienstplan nicht importiert: '+err.message)}finally{e.target.value=''}
+  });
+  $('route-from').addEventListener('change',e=>{shiftData.route.from=e.target.value.trim().slice(0,180);save()});
+  $('route-to').addEventListener('change',e=>{shiftData.route.to=e.target.value.trim().slice(0,180);save()});
+  $('route-check').addEventListener('click',()=>{shiftData.route.from=$('route-from').value.trim().slice(0,180);shiftData.route.to=$('route-to').value.trim().slice(0,180);save();openRoute()});
+  $('shift-clear').addEventListener('click',()=>{if(confirm('Diesen privaten Dienstplan von diesem Gerät löschen?')){shiftData.shifts=[];save();render()}});
+  $('shift-export').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify({version:3,...shiftData},null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=make('a');a.href=url;a.download='MILO_MEIN_PRIVATER_SCHICHTPLAN.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000)
+  });
+  const today=new Date();$('shift-date').value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
+  render();document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 })();
 </script>
 </body>
